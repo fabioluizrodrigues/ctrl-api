@@ -1,12 +1,12 @@
 import { RequestHandler } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { ValidationError, Schema } from 'yup';
+import { ValidationError, SchemaOf } from 'yup';
 
 type TProperty = 'body' | 'header' | 'params' | 'query';
 
-type TGetSchema = <T>(shcema: Schema<T>) => Schema<T>;
+type TGetSchema = <T>(schema: SchemaOf<T>) => SchemaOf<T>;
 
-type TAllSchemas = Record<TProperty, Schema<any>>;
+type TAllSchemas = Record<TProperty, SchemaOf<any>>;
 
 type TGetAllSchemas = (getSchema: TGetSchema) => Partial<TAllSchemas>;
 
