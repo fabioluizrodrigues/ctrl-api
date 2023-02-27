@@ -1,7 +1,8 @@
 /node_modules
-*.log
+.log
 
 /build
 /coverage
 
 .env
+.sqlite
