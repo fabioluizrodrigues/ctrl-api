@@ -31,4 +31,13 @@ describe('Cidades - Create', () => {
     expect(res1.body).toHaveProperty('errors.body.nome');
   });
 
+  it('Nega criar registro com nome maior que 150 caracteres', async () => {
+    const res1 = await testServer
+      .post('/cidades')
+      .send({ nome: 'Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome' });
+      
+    expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    expect(res1.body).toHaveProperty('errors.body.nome');
+  });
+
 });
