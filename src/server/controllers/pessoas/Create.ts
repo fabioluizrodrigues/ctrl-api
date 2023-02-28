@@ -1,4 +1,4 @@
-import { isValidCNPJ, } from '@brazilian-utils/brazilian-utils';
+import { isValidCNPJ, isValidMobilePhone, } from '@brazilian-utils/brazilian-utils';
 import { isValidCPF } from '@brazilian-utils/brazilian-utils';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
@@ -19,7 +19,12 @@ export const createValidation = validation((getSchema) => ({
       ),
     nome_razao: yup.string().required().min(3).max(255),
     email: yup.string().required().email(),
-    telefone: yup.string().required(),
+    telefone: yup.string().required()
+      .test(
+        'is-valid-telefone',
+        'Telefone inválido.',
+        (value) => isValidMobilePhone(value as string)
+      ),
     ie_rg: yup.string().optional(),
     cep: yup.string().optional(),
     estado: yup.string().optional().min(2).max(2),

@@ -1,4 +1,4 @@
-import { isValidCNPJ, isValidCPF } from '@brazilian-utils/brazilian-utils';
+import { isValidCNPJ, isValidCPF, isValidMobilePhone } from '@brazilian-utils/brazilian-utils';
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
@@ -17,12 +17,17 @@ export const updateByIdValidation = validation((getSchema) => ({
     cnpj_cpf: yup.string().required().min(11).max(14)
       .test(
         'is-valid-cnpj-cpf',
-        'CNPJ/CPF incválido!',
+        'CNPJ/CPF inválido!',
         (value) => (isValidCNPJ(value as string) || isValidCPF(value as string))
       ),
     nome_razao: yup.string().required().min(3).max(255),
     email: yup.string().required().email(),
-    telefone: yup.string().required(),
+    telefone: yup.string().required()
+      .test(
+        'is-valid-telefone',
+        'Telefone inválido.',
+        (value) => isValidMobilePhone(value as string)
+      ),
     ie_rg: yup.string().optional(),
     cep: yup.string().optional(),
     estado: yup.string().optional().min(2).max(2),
