@@ -312,5 +312,16 @@ describe('Pessoas - Create', () => {
     expect(res1.body).toHaveProperty('errors.default');
   });
 
+  it('Tenta criar uma registro sem enviar nenhuma propriedade', async () => {
+    const res1 = await testServer
+      .post('/pessoas')
+      .send({});
+
+    expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
+    expect(res1.body).toHaveProperty('errors.body.cnpj_cpf');
+    expect(res1.body).toHaveProperty('errors.body.nome_razao');
+    expect(res1.body).toHaveProperty('errors.body.email');
+    expect(res1.body).toHaveProperty('errors.body.telefone');
+  });
 
 });
