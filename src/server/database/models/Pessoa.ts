@@ -4,13 +4,13 @@ export interface IPessoa {
   nome_razao: string;
   email: string;
   telefone: string;
-  ie_rg: string;
-  cep: string;
-  estado: string;
-  cidade_id: number;
-  bairro: string;
-  endereco: string;
-  numero: string;
-  complemento: string;
-  observacoes: string;
+  ie_rg?: string;
+  cep?: string;
+  estado?: string;
+  cidade_id?: number;
+  bairro?: string;
+  logradouro?: string;
+  numero?: string;
+  complemento?: string;
+  observacoes?: string;
 }

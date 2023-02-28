@@ -1,14 +1,31 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IPessoa } from '../../models';
+import { CidadesProvider } from '../cidades';
+import { existsCnpjCpf } from './ExistsCnpjCpf';
+import { existsEmail } from './ExistsEmail';
+import { existsTelefone } from './ExistsTelefone';
 
 export const create = async (pessoa: Omit<IPessoa, 'id'>): Promise<number | Error> => {
   try {
-    const [{ count }] = await Knex(ETableNames.cidade)
-      .where('id', '=', pessoa.cidade_id)
-      .count<[{ count: number }]>('* as count');
 
-    if (count === 0) {
+    //verifica se cnpf/cpf já existe no cadastro.
+    if (await existsCnpjCpf(pessoa.cnpj_cpf)) {
+      return new Error('O CNPJ/CPF informado já consta no cadastro.');
+    }
+
+    //verifica se email já existe no cadastro
+    if (await existsEmail(pessoa.email)) {
+      return new Error('O email informado já consta no cadastro.');
+    }
+
+    //verifica se telefone já existe no cadastro
+    if (await existsTelefone(pessoa.telefone)) {
+      return new Error('O Telefone informado já consta no cadastro.');
+    }
+
+    //verifica se a cidade informada existe no cadatro de cidades
+    if (!await CidadesProvider.existsCidadeId(pessoa.cidade_id as number)) {
       return new Error('A cidade informada no cadastro não foi encontrata.');
     }
 

@@ -3,15 +3,11 @@ import * as updateById from './UpdateById';
 import * as getById from './GetById';
 import * as create from './Create';
 import * as getAll from './GetAll';
-import * as count from './Count';
-import * as existsCidadeId from './ExistsCidadeId';
 
-export const CidadesProvider = {
+export const PessoasController = {
   ...deleteById,
   ...updateById,
   ...getById,
   ...create,
   ...getAll,
-  ...count,
-  ...existsCidadeId
 };
