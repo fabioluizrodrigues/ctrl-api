@@ -2,31 +2,12 @@ import { StatusCodes } from 'http-status-codes/build/cjs/status-codes';
 import { testServer } from '../jest.setup';
 
 
-describe('Pessoas - Create', () => {
+describe('Cidades - Create', () => {
 
   it('Cria registro', async () => {
-
-    const resCriaCidade = await testServer
-      .post('/cidades')
-      .send({ nome: 'Cidade Exemplo' });
-
     const res1 = await testServer
-      .post('/pessoas')
-      .send({
-        cnpj_cpf: '91339995115',
-        nome_razao: 'Fábio Luiz Rodrigues',
-        email: 'fabio2@site.com',
-        telefone: '66999381882',
-        ie_rg: '123456',
-        cep: '',
-        estado: 'MT',
-        cidade_id: `${resCriaCidade.body}`,
-        bairro: '',
-        logradouro: '',
-        numero: '',
-        complemento: '',
-        observacoes: ''
-      });
+      .post('/cidades')
+      .send({ nome: 'Caxias do Sul' });
 
     expect(res1.statusCode).toEqual(StatusCodes.CREATED);
     expect(typeof res1.body).toEqual('number');
@@ -34,7 +15,7 @@ describe('Pessoas - Create', () => {
 
   it('Nega criar registro com nome muito curto', async () => {
     const res1 = await testServer
-      .post('/pessoas')
+      .post('/cidades')
       .send({ nome: 'Ca' });
 
     expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
@@ -43,18 +24,18 @@ describe('Pessoas - Create', () => {
 
   it('Nega criar registro com nome vazio', async () => {
     const res1 = await testServer
-      .post('/pessoas')
+      .post('/cidades')
       .send({ nome: '' });
-
+      
     expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
     expect(res1.body).toHaveProperty('errors.body.nome');
   });
 
   it('Nega criar registro com nome maior que 150 caracteres', async () => {
     const res1 = await testServer
-      .post('/pessoas')
+      .post('/cidades')
       .send({ nome: 'Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome' });
-
+      
     expect(res1.statusCode).toEqual(StatusCodes.BAD_REQUEST);
     expect(res1.body).toHaveProperty('errors.body.nome');
   });

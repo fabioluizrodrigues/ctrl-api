@@ -1,57 +1,79 @@
 import { StatusCodes } from 'http-status-codes/build/cjs/status-codes';
 import { testServer } from '../jest.setup';
 
-describe('Cidades - UpdateById', () => {
-  it('Atualiza registro', async () => {
-    const res1 = await testServer
-      .post('/cidades')
-      .send({ nome: 'Caxias do Sul' });
+describe('Pessoas - UpdateById', () => {
+  let cidade_id: number | undefined = undefined;
 
-    expect(res1.statusCode).toEqual(StatusCodes.CREATED);
+  beforeAll(async () => {
+    const resCriaCidade = await testServer
+      .post('/cidades')
+      .send({ nome: 'Cidade Exemplo' });
+    cidade_id = resCriaCidade.body;
+  });
+
+
+  it('Atualiza registro', async () => {
+    const resCriaPessoa = await testServer
+      .post('/pessoas')
+      .send({
+        cnpj_cpf: '63782474716',
+        nome_razao: 'Fulano de tal',
+        email: 'email1@site.com',
+        telefone: '66999991234',
+        ie_rg: '123456151515',
+        cep: '78000000',
+        estado: 'SP',
+        cidade_id: cidade_id,
+        bairro: 'bairro do cascalho',
+        logradouro: 'rua das pedras',
+        numero: '123',
+        complemento: 'casas 1',
+        observacoes: 'observando... só olhando'
+      });
+
+    expect(resCriaPessoa.statusCode).toEqual(StatusCodes.CREATED);
 
     const resAtualiza = await testServer
-      .put(`/cidades/${res1.body}`)
-      .send({ nome: 'Caxias' });
+      .put(`/pessoas/${resCriaPessoa.body}`)
+      .send({
+        cnpj_cpf: '63782474716',
+        nome_razao: 'Fulano de tal atualizado',
+        email: 'email1@site.com',
+        telefone: '66999991234',
+        ie_rg: '123456151515',
+        cep: '78000000',
+        estado: 'SP',
+        cidade_id: cidade_id,
+        bairro: 'bairro do cascalho',
+        logradouro: 'rua das pedras',
+        numero: '123',
+        complemento: 'casas 1',
+        observacoes: 'observando... só olhando'
+      });
 
     expect(resAtualiza.statusCode).toEqual(StatusCodes.NO_CONTENT);
   });
 
   it('Tenta atualizar registro que não exite', async () => {
     const res1 = await testServer
-      .put('/cidades/99999')
-      .send({ nome: 'Caxias' });
+      .put('/pessoas/99999')
+      .send({
+        cnpj_cpf: '63782474716',
+        nome_razao: 'Fulano de tal atualizado',
+        email: 'email1@site.com',
+        telefone: '66999991234',
+        ie_rg: '123456151515',
+        cep: '78000000',
+        estado: 'SP',
+        cidade_id: cidade_id,
+        bairro: 'bairro do cascalho',
+        logradouro: 'rua das pedras',
+        numero: '123',
+        complemento: 'casas 1',
+        observacoes: 'observando... só olhando... atualizado'
+      });
 
     expect(res1.statusCode).toEqual(StatusCodes.INTERNAL_SERVER_ERROR);
     expect(res1.body).toHaveProperty('errors.default');
-  });
-
-  it('Nega atualizar registro com nome muito curto', async () => {
-    const res1 = await testServer
-      .post('/cidades')
-      .send({ nome: 'Caxias do Sul' });
-
-    expect(res1.statusCode).toEqual(StatusCodes.CREATED);
-
-    const resAtualiza = await testServer
-      .put(`/cidades/${res1.body}`)
-      .send({ nome: 'Ca' });
-
-    expect(resAtualiza.statusCode).toEqual(StatusCodes.BAD_REQUEST);
-    expect(resAtualiza.body).toHaveProperty('errors.body.nome');
-  });
-
-  it('Nega atualizar registro com nome maior que 150 caracteres', async () => {
-    const res1 = await testServer
-      .post('/cidades')
-      .send({ nome: 'Caxias do Sul' });
-
-    expect(res1.statusCode).toEqual(StatusCodes.CREATED);
-
-    const resAtualiza = await testServer
-      .put(`/cidades/${res1.body}`)
-      .send({ nome: 'Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome Nome nome' });
-
-    expect(resAtualiza.statusCode).toEqual(StatusCodes.BAD_REQUEST);
-    expect(resAtualiza.body).toHaveProperty('errors.body.nome');
   });
 });
