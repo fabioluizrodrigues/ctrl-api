@@ -1,15 +1,15 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IUsuarioCreate } from '../../models';
+import { existsCnpjCpf } from '../pessoas/ExistsCnpjCpf';
 import { existsEmail } from '../pessoas/ExistsEmail';
 import { existsTelefone } from '../pessoas/ExistsTelefone';
 import { existsUsername } from './ExistsUsername';
 
 export const create = async (usuarioCreate: IUsuarioCreate): Promise<number | Error> => {
   try {
-
-    if (await existsUsername(usuarioCreate.username)) {
-      return new Error(`O username ${usuarioCreate.username} já existe no cadastro.`);
+    if (await existsCnpjCpf(usuarioCreate.cpf)) {
+      return new Error(`O CPF ${usuarioCreate.cpf} já existe no cadastro.`);
     }
 
     if (await existsEmail(usuarioCreate.email)) {
@@ -19,6 +19,10 @@ export const create = async (usuarioCreate: IUsuarioCreate): Promise<number | Er
     if (await existsTelefone(usuarioCreate.telefone)) {
       return new Error(`O Telefone ${usuarioCreate.telefone} já consta no cadastro.`);
     }
+
+    if (await existsUsername(usuarioCreate.username)) {
+      return new Error(`O username ${usuarioCreate.username} já existe no cadastro.`);
+    }    
 
     const [resultPessoa] = await Knex(ETableNames.pessoa)
       .insert({
