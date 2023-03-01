@@ -1,16 +1,42 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
-import { IUsuario } from '../../models';
+import { IUsuarioCreate } from '../../models';
+import { existsEmail } from '../pessoas/ExistsEmail';
+import { existsTelefone } from '../pessoas/ExistsTelefone';
 import { existsUsername } from './ExistsUsername';
 
-export const create = async (usuario: Omit<IUsuario, 'id'>): Promise<number | Error> => {
+export const create = async (usuarioCreate: IUsuarioCreate): Promise<number | Error> => {
   try {
 
-    if (await existsUsername(usuario.username)) {
-      return new Error(`O username ${usuario.username} já existe no cadastro.`);
+    if (await existsUsername(usuarioCreate.username)) {
+      return new Error(`O username ${usuarioCreate.username} já existe no cadastro.`);
     }
 
-    const [result] = await Knex(ETableNames.usuario).insert(usuario).returning('id');
+    if (await existsEmail(usuarioCreate.email)) {
+      return new Error(`O email ${usuarioCreate.email} já consta no cadastro.`);
+    }
+
+    if (await existsTelefone(usuarioCreate.telefone)) {
+      return new Error(`O Telefone ${usuarioCreate.telefone} já consta no cadastro.`);
+    }
+
+    const [resultPessoa] = await Knex(ETableNames.pessoa)
+      .insert({
+        cnpj_cpf: usuarioCreate.cpf,
+        nome_razao: usuarioCreate.nome,
+        email: usuarioCreate.email,
+        telefone: usuarioCreate.telefone
+      })
+      .returning('id');
+
+    const [result] = await Knex(ETableNames.usuario)
+      .insert({
+        nome: usuarioCreate.nome,
+        username: usuarioCreate.username,
+        password: usuarioCreate.password,
+        pessoa_id: resultPessoa.id
+      })
+      .returning('id');
 
     if (typeof result === 'object') {
       return result.id;

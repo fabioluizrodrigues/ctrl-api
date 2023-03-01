@@ -11,7 +11,7 @@ interface IBodyProps extends Omit<IPessoa, 'id'> { }
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
-    cnpj_cpf: yup.string().required().min(11).max(14)
+    cnpj_cpf: yup.string().required()
       .test(
         'is-valid-cnpj-cpf',
         'CNPJ/CPF inválido!',
