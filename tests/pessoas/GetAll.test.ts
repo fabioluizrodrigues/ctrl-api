@@ -4,17 +4,44 @@ import { testServer } from '../jest.setup';
 describe('Pessoas - GetAll', () => {
 
   let cidade_id: number | undefined = undefined;
+  let accessToken = '';
 
-  beforeAll(async() => {
+  beforeAll(async () => {
+    await testServer.post('/registrar').send({
+      nome: 'Usuario Tester',
+      cpf: '48877823062',
+      email: 'tester1@email.com',
+      telefone: '11999990000',
+      username: 'teste1',
+      password: 'teste1'
+    });
+
+    const signInRes = await testServer.post('/entrar').send({
+      username: 'teste1',
+      password: 'teste1'
+    });
+
+    accessToken = signInRes.body.accessToken;
+
     const resCriaCidade = await testServer
       .post('/cidades')
+      .set({ Authorization: `Bearer ${accessToken}` })
       .send({ nome: 'Cidade Exemplo' });
     cidade_id = resCriaCidade.body;
+  });
+
+  it('Tenta buscar todos os registros sem token de autenticação', async () => {
+    const res1 = await testServer
+      .get('/pessoas')
+      .send();
+    expect(res1.statusCode).toEqual(StatusCodes.UNAUTHORIZED);
+    expect(res1.body).toHaveProperty('errors.default');
   });
 
   it('Busca todos os registros', async () => {
     const resCriaPessoa = await testServer
       .post('/pessoas')
+      .set({ Authorization: `Bearer ${accessToken}` })
       .send({
         cnpj_cpf: '63782474716',
         nome_razao: 'Fulano de tal',
@@ -35,6 +62,7 @@ describe('Pessoas - GetAll', () => {
 
     const resBuscaPessoas = await testServer
       .get('/pessoas')
+      .set({ Authorization: `Bearer ${accessToken}` })
       .send();
 
     expect(Number(resBuscaPessoas.header['x-total-count'])).toBeGreaterThan(0);
