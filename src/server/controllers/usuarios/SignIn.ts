@@ -1,10 +1,10 @@
 import { UsuariosProvider } from '../../database/providers/usuarios';
+import { JWTService, PasswordCrypto, TJwtErrors } from '../../shared/services';
 import { IUsuarioLogin } from '../../database/models';
 import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
 import * as yup from 'yup';
-import { PasswordCrypto } from '../../shared/services';
 
 interface IBodyProps extends IUsuarioLogin { }
 
@@ -17,7 +17,8 @@ export const signInValidation = validation((getSchema) => ({
 
 export const signIn = async (req: Request<{}, {}, IUsuarioLogin>, res: Response) => {
 
-  const ERROR_MESSAGE = 'Acesso negado! Email ou senha inválidos.';
+  const UNAUTHORIZED_ERROR_MESSAGE = 'Acesso negado! Email ou senha inválidos.';
+  const INTERNAL_SERVER_ERROR_MESSAGE = 'Erro ao gerar o token de acesso.';
 
   const { username, password } = req.body;
 
@@ -25,7 +26,7 @@ export const signIn = async (req: Request<{}, {}, IUsuarioLogin>, res: Response)
 
   if (result instanceof Error) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      errors: { default: ERROR_MESSAGE }
+      errors: { default: UNAUTHORIZED_ERROR_MESSAGE }
     });
   }
 
@@ -33,9 +34,18 @@ export const signIn = async (req: Request<{}, {}, IUsuarioLogin>, res: Response)
 
   if (!passwordMatch) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
-      errors: { default: ERROR_MESSAGE }
+      errors: { default: UNAUTHORIZED_ERROR_MESSAGE }
     });
   } else {
-    return res.status(StatusCodes.OK).json({ accessToken: 'teste.teste.teste' });
+
+    const accessToken = JWTService.sign({ uid: result.id });
+
+    if (accessToken === TJwtErrors.JWT_SECRET_NOT_FOUND) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: { default: INTERNAL_SERVER_ERROR_MESSAGE }
+      });
+    }
+
+    return res.status(StatusCodes.OK).json({ accessToken });
   }
 };
