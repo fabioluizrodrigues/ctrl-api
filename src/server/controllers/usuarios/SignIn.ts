@@ -4,6 +4,7 @@ import { validation } from '../../shared/middleware';
 import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
 import * as yup from 'yup';
+import { PasswordCrypto } from '../../shared/services';
 
 interface IBodyProps extends IUsuarioLogin { }
 
@@ -28,7 +29,9 @@ export const signIn = async (req: Request<{}, {}, IUsuarioLogin>, res: Response)
     });
   }
 
-  if (password !== result.password) {
+  const passwordMatch = await PasswordCrypto.verifyPassword(password, result.password);
+
+  if (!passwordMatch) {
     return res.status(StatusCodes.UNAUTHORIZED).json({
       errors: { default: ERROR_MESSAGE }
     });
