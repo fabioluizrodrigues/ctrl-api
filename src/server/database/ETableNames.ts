@@ -3,5 +3,6 @@
 export enum ETableNames {
   cidade = 'cidade',
   pessoa = 'pessoa',
-  usuario = 'usuario'
+  usuario = 'usuario',
+  veiculo = 'veiculo'
 }
