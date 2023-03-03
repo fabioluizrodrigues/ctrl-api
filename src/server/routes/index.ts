@@ -1,7 +1,7 @@
 import { UsuariosController } from '../controllers/usuarios';
 import { ensureAuthenticated } from '../shared/middleware';
 import { PessoasController } from '../controllers/pessoas';
-import { CidadesController } from './../controllers';
+import { CidadesController, VeiculosController } from './../controllers';
 import { Router } from 'express';
 
 const router = Router();
@@ -16,12 +16,17 @@ router.get('/cidades/:id', ensureAuthenticated, CidadesController.getByIdValidat
 router.put('/cidades/:id', ensureAuthenticated, CidadesController.updateByIdValidation, CidadesController.updateById);
 router.delete('/cidades/:id', ensureAuthenticated, CidadesController.deleteByIdValidation, CidadesController.deleteById);
 
-
 router.get('/pessoas', ensureAuthenticated, PessoasController.getAllValidation, PessoasController.getAll);
 router.post('/pessoas', ensureAuthenticated, PessoasController.createValidation, PessoasController.create);
 router.get('/pessoas/:id', ensureAuthenticated, PessoasController.getByIdValidation, PessoasController.getById);
 router.put('/pessoas/:id', ensureAuthenticated, PessoasController.updateByIdValidation, PessoasController.updateById);
 router.delete('/pessoas/:id', ensureAuthenticated, PessoasController.deleteByIdValidation, PessoasController.deleteById);
+
+router.get('/veiculos', ensureAuthenticated, VeiculosController.getAllValidation, VeiculosController.getAll);
+router.post('/veiculos', ensureAuthenticated, VeiculosController.createValidation, VeiculosController.create);
+router.get('/veiculos/:id', ensureAuthenticated, VeiculosController.getByIdValidation, VeiculosController.getById);
+router.put('/veiculos/:id', ensureAuthenticated, VeiculosController.updateByIdValidation, VeiculosController.updateById);
+router.delete('/veiculos/:id', ensureAuthenticated, VeiculosController.deleteByIdValidation, VeiculosController.deleteById);
 
 router.post('/entrar', UsuariosController.signInValidation, UsuariosController.signIn);
 router.post('/registrar', UsuariosController.signUpValidation, UsuariosController.signUp);
