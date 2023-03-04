@@ -6,8 +6,8 @@ export async function up(knex: Knex) {
     .schema
     .createTable(ETableNames.veiculo, table => {
       table.bigIncrements('id').primary().index();
-      table.string('placa', 7).index().unique().notNullable(); //FJX0174
-      table.string('ranavam', 20).notNullable(); //00544681312
+      table.string('placa', 7).index().unique().notNullable(); 
+      table.string('renavam', 20).notNullable(); 
       table.integer('nr_eixos').notNullable();
       table.integer('ano_fabrica').nullable();
       table.integer('ano_modelo').nullable();

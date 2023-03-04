@@ -11,21 +11,24 @@ interface IBodyProps extends Omit<IVeiculo, 'id'> { }
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
     placa: yup.string().required()
-      .test('is-valid-plate', 'Placa inválida', (value) => isValidLicensePlate(value as string)),
+      .test('is-valid-plate',
+        'O formato da placa é inválido.',
+        (value) => isValidLicensePlate(value as string)
+      ),
     renavam: yup.string().required().max(20),
     nr_eixos: yup.number().required(),
-    ano_fabrica: yup.number().notRequired(),
-    ano_modelo: yup.number().notRequired(),
-    ano_exercicio: yup.number().notRequired(),
-    marca: yup.string().notRequired().min(3).max(150),
-    modelo: yup.string().notRequired().min(3).max(150),
-    cor: yup.string().notRequired().min(3).max(100),
-    observacoes: yup.string().notRequired().min(3).max(255)
+    ano_fabrica: yup.number().optional(),
+    ano_modelo: yup.number().optional(),
+    ano_exercicio: yup.number().optional(),
+    marca: yup.string().optional().min(3).max(150),
+    modelo: yup.string().optional().min(3).max(150),
+    cor: yup.string().optional().min(3).max(100),
+    observacoes: yup.string().optional().min(3).max(255)
   }))
 }));
 
 export const create = async (req: Request<{}, {}, IVeiculo>, res: Response) => {
-
+  
   const result = await VeiculosProvider.create(req.body);
 
   if (result instanceof Error) {

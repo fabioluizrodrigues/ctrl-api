@@ -1,10 +1,28 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IVeiculo } from '../../models';
+import { existsPlaca } from './ExistsPlaca';
 
 export const create = async (veiculo: Omit<IVeiculo, 'id'>): Promise<number | Error> => {
   try {
-    const [result] = await Knex(ETableNames.veiculo).insert(veiculo).returning('id');
+    if (await existsPlaca(veiculo.placa)) {
+      return new Error(`A placa ${veiculo.placa} já consta no cadastro.`);
+    }
+
+    const [result] = await Knex(ETableNames.veiculo)
+      .insert({
+        placa: veiculo.placa.toUpperCase(),
+        renavam: veiculo.renavam,
+        nr_eixos: veiculo.nr_eixos,
+        ano_fabrica: veiculo.ano_fabrica,
+        ano_modelo: veiculo.ano_modelo,
+        ano_exercicio: veiculo.ano_exercicio,
+        marca: veiculo.marca,
+        modelo: veiculo.modelo,
+        cor: veiculo.cor,
+        observacoes: veiculo.observacoes
+      })
+      .returning('id');
 
     if (typeof result === 'object') {
       return result.id;

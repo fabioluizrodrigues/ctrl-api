@@ -15,7 +15,11 @@ interface IBodyProps extends Omit<IVeiculo, 'id'> { }
 export const updateByIdValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
     placa: yup.string().required()
-      .test('is-valid-plate', 'Placa inválida', (value) => isValidLicensePlate(value as string)),
+      .test(
+        'is-valid-plate',
+        'Placa O formato da placa é inválido.',
+        (value) => isValidLicensePlate(value as string)
+      ),
     renavam: yup.string().required().max(20),
     nr_eixos: yup.number().required(),
     ano_fabrica: yup.number().notRequired(),

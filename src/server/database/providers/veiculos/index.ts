@@ -5,6 +5,7 @@ import * as create from './Create';
 import * as getAll from './GetAll';
 import * as count from './Count';
 import * as existsId from './ExistsId';
+import * as existsPlaca from './ExistsPlaca';
 
 export const VeiculosProvider = {
   ...deleteById,
@@ -13,5 +14,6 @@ export const VeiculosProvider = {
   ...create,
   ...getAll,
   ...count,
-  ...existsId
+  ...existsId,
+  ...existsPlaca,
 };

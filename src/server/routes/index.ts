@@ -1,8 +1,11 @@
-import { UsuariosController } from '../controllers/usuarios';
 import { ensureAuthenticated } from '../shared/middleware';
-import { PessoasController } from '../controllers/pessoas';
-import { CidadesController, VeiculosController } from './../controllers';
 import { Router } from 'express';
+import {
+  CidadesController,
+  PessoasController,
+  UsuariosController,
+  VeiculosController
+} from '../controllers';
 
 const router = Router();
 
