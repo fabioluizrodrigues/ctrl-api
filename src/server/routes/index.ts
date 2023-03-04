@@ -2,6 +2,7 @@ import { ensureAuthenticated } from '../shared/middleware';
 import { Router } from 'express';
 import {
   CidadesController,
+  OrganizacoesController,
   PessoasController,
   UsuariosController,
   VeiculosController
@@ -30,6 +31,12 @@ router.post('/veiculos', ensureAuthenticated, VeiculosController.createValidatio
 router.get('/veiculos/:id', ensureAuthenticated, VeiculosController.getByIdValidation, VeiculosController.getById);
 router.put('/veiculos/:id', ensureAuthenticated, VeiculosController.updateByIdValidation, VeiculosController.updateById);
 router.delete('/veiculos/:id', ensureAuthenticated, VeiculosController.deleteByIdValidation, VeiculosController.deleteById);
+
+router.get('/organizacoes', ensureAuthenticated, OrganizacoesController.getAllValidation, OrganizacoesController.getAll);
+router.post('/organizacoes', ensureAuthenticated, OrganizacoesController.createValidation, OrganizacoesController.create);
+router.get('/organizacoes/:id', ensureAuthenticated, OrganizacoesController.getByIdValidation, OrganizacoesController.getById);
+router.put('/organizacoes/:id', ensureAuthenticated, OrganizacoesController.updateByIdValidation, OrganizacoesController.updateById);
+router.delete('/organizacoes/:id', ensureAuthenticated, OrganizacoesController.deleteByIdValidation, OrganizacoesController.deleteById);
 
 router.post('/entrar', UsuariosController.signInValidation, UsuariosController.signIn);
 router.post('/registrar', UsuariosController.signUpValidation, UsuariosController.signUp);
