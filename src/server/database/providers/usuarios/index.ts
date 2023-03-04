@@ -1,11 +1,13 @@
-import * as create from './Create';
-import * as getByUsername from './GetByUsername';
 import * as existsUsername from './ExistsUsername';
+import * as getByUsername from './GetByUsername';
+import * as existsId from './ExistsId';
 import * as getById from './GetById';
+import * as create from './Create';
 
 export const UsuariosProvider = {
-  ...create,
-  ...getByUsername,
   ...existsUsername,
-  ...getById
+  ...getByUsername,
+  ...getById,
+  ...existsId,
+  ...create,
 };

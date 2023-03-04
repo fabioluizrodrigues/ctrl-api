@@ -1,9 +1,9 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const existsCidadeId = async (id: number): Promise<Boolean | Error> => {
+export const existsId = async (id: number): Promise<Boolean | Error> => {
   try {
-    const result = await Knex(ETableNames.cidade).select('id').where('id', '=', id).first();
+    const result = await Knex(ETableNames.organizacao).select('id').where('id', '=', id).first();
     if (!result) return false;
     return true;
   } catch (error) {

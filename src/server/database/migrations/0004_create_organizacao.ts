@@ -4,9 +4,10 @@ import { ETableNames } from '../ETableNames';
 export async function up(knex: Knex) {
   return knex
     .schema
-    .createTable(ETableNames.controle, table => {
+    .createTable(ETableNames.organizacao, table => {
       table.bigIncrements('id').primary().index();
-      table.bigInteger('cidade_id')
+      table.string('nome', 200).notNullable();
+      table.bigInteger('usuario_adm_id')
         .index()
         .nullable()
         .references('id')
@@ -15,15 +16,15 @@ export async function up(knex: Knex) {
         .onDelete('RESTRICT');
     })
     .then(() => {
-      console.log(`# Created table ${ETableNames.controle}`);
+      console.log(`# Created table ${ETableNames.organizacao}`);
     });
 }
 
 export async function down(knex: Knex) {
   return knex
     .schema
-    .dropTable(ETableNames.controle)
+    .dropTable(ETableNames.organizacao)
     .then(() => {
-      console.log(`# Dropped table ${ETableNames.controle}`);
+      console.log(`# Dropped table ${ETableNames.organizacao}`);
     });
 }

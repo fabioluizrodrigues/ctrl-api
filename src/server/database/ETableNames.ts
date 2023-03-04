@@ -5,5 +5,5 @@ export enum ETableNames {
   pessoa = 'pessoa',
   usuario = 'usuario',
   veiculo = 'veiculo',
-  controle = 'controle',
+  organizacao = 'organizacao',
 }

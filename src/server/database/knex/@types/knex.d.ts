@@ -1,6 +1,6 @@
 import {
   ICidade,
-  IControle,
+  IOrganizacao,
   IPessoa,
   IUsuario,
   IVeiculo
@@ -12,6 +12,6 @@ declare module 'knex/types/tables' {
     pessoa: IPessoa,
     usuario: IUsuario
     veiculo: IVeiculo
-    controle: IControle
+    organizacao: IOrganizacao
   }
 }
