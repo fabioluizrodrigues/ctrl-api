@@ -5,7 +5,7 @@ export const existsPlaca = async (placa: string, excludesId: number[] = []): Pro
   try {
     const result = await Knex(ETableNames.veiculo)
       .select('id')
-      .where('placa', '=', placa.trim().toLowerCase())
+      .where('placa', '=', placa.trim().toUpperCase())
       .whereNotIn('id', excludesId)
       .first();
     if (!result) return false;

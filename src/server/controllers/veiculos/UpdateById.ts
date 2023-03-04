@@ -21,7 +21,7 @@ export const updateByIdValidation = validation((getSchema) => ({
         (value) => isValidLicensePlate(value as string)
       ),
     renavam: yup.string().required().max(20),
-    nr_eixos: yup.number().required(),
+    nr_eixos: yup.number().required().min(2),
     ano_fabrica: yup.number().notRequired(),
     ano_modelo: yup.number().notRequired(),
     ano_exercicio: yup.number().notRequired(),
