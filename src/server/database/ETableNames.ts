@@ -1,9 +1,12 @@
 
 
 export enum ETableNames {
-  cidade = 'cidade',
-  pessoa = 'pessoa',
-  usuario = 'usuario',
-  veiculo = 'veiculo',
-  organizacao = 'organizacao',
+  usuario = 'usuarios',
+  organizacao = 'organizacoes',
+  permissao = 'permissoes',
+  funcao = 'funcoes',
+  cidade = 'cidades',
+  pessoa = 'pessoas',
+  veiculo = 'veiculos',
+  conta = 'contas',
 }

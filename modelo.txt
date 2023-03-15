@@ -1,0 +1,74 @@
+Usuarios
+  id: string;
+  nome: string;
+  cpf: string; //chave unica
+  username: string;
+  password: string;
+
+Pessoas
+  id: string;
+  cnpj_cpf: string uniqui
+  nome_razao VarChar(255)
+  email      VarChar(255)
+  telefone   VarChar(15)
+  cep        VarChar(255)
+  estado     VarChar(255)
+  cidade     VarChar(255)
+  bairro     VarChar(255)
+  logradouro VarChar(255)
+  numero     VarChar(10)
+  observacao Text
+
+Permissoes
+  id: string;
+  nome: string;
+  descricao: string;
+
+Funcoes
+  id: string;
+  nome: string;
+  descricao: string;
+
+Organizações
+  id: string;
+  nome: string;
+  descricao: string;
+  usuario_adm_id: string;
+
+Empresas
+  id: string;
+  organizacao_id: string
+  nome_razao: string
+
+UsuarioPermissoes
+  organizacao_id: string
+  empresa_id: string
+  usuario_id: string
+  permissao_id: string;
+
+UsuarioFuncoes
+  organizacao_id: string
+  empresa_id: string
+  usuario_id: string
+  funcao_id: string;
+
+FuncoesPermissoes
+  organizacao_id: string
+  empresa_id: string
+  funcao_id: string;
+  permisao_id string;
+
+
+Contas Financeiras
+Contas a Receber
+Contas a Pagar
+  Saidas (Fretes / Vendas / Serviços / Outros / Emprestimos)
+    SaidasParcelaReceber
+    SaidasParcelaPagar
+  Entradas (Pedidos / Notas Fiscais / Compras / Despesas)
+    EntradaParcelaReceber
+    EntradaParcelaPagar
+Quitações
+Veiculos
+Cidades
+

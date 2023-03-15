@@ -5,7 +5,7 @@ import { PessoasProvider } from '../../database/providers/pessoas';
 import { validation } from '../../shared/middleware';
 
 interface IQueryProps {
-  id?: number;
+  id?: string;
   page?: number;
   limit?: number;
   filter?: string;
@@ -13,7 +13,7 @@ interface IQueryProps {
 
 export const getAllValidation = validation((getSchema) => ({
   query: getSchema<IQueryProps>(yup.object().shape({
-    id: yup.number().integer().notRequired().default(0),
+    id: yup.string().notRequired().uuid(),
     page: yup.number().notRequired().moreThan(0),
     limit: yup.number().notRequired().moreThan(0),
     filter: yup.string().notRequired(),
@@ -21,7 +21,7 @@ export const getAllValidation = validation((getSchema) => ({
 }));
 
 export const getAll = async (req: Request<{}, {}, {}, IQueryProps>, res: Response) => {
-  const result = await PessoasProvider.getAll(req.query.page || 1, req.query.limit || 7, req.query.filter || '', Number(req.query.id || 0));
+  const result = await PessoasProvider.getAll(req.query.page || 1, req.query.limit || 7, req.query.filter || '', req.query.id);
   const count = await PessoasProvider.count(req.query.filter);
 
   if (result instanceof Error) {

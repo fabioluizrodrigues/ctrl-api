@@ -1,7 +1,7 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const existsUsername = async (username: string, excludesId: number[] = []): Promise<boolean | Error> => {
+export const existsUsername = async (username: string, excludesId: string[] = []): Promise<boolean | Error> => {
   try {
 
     const result = await Knex(ETableNames.usuario)

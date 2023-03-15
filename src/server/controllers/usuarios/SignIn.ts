@@ -1,10 +1,10 @@
-import { UsuariosProvider } from '../../database/providers/usuarios';
-import { JWTService, PasswordCrypto, TJwtErrors } from '../../shared/services';
-import { IUsuarioLogin } from '../../database/models';
-import { validation } from '../../shared/middleware';
-import { StatusCodes } from 'http-status-codes';
 import { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
+import { IUsuarioLogin } from '../../database/models';
+import { UsuariosProvider } from '../../database/providers/usuarios';
+import { validation } from '../../shared/middleware';
+import { JWTService, PasswordCrypto, TJwtErrors } from '../../shared/services';
 
 interface IBodyProps extends IUsuarioLogin { }
 
@@ -37,8 +37,19 @@ export const signIn = async (req: Request<{}, {}, IUsuarioLogin>, res: Response)
       errors: { default: UNAUTHORIZED_ERROR_MESSAGE }
     });
   } else {
+    
+    const resultOrganizacaoId = await UsuariosProvider.getOrgIdByUsuarioId(result.id);
 
-    const accessToken = JWTService.sign({ uid: result.id });
+    if (resultOrganizacaoId instanceof Error) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        errors: { default: INTERNAL_SERVER_ERROR_MESSAGE }
+      });
+    }
+
+    const accessToken = JWTService.sign({
+      uid: result.id,
+      oid: resultOrganizacaoId
+    });
 
     if (accessToken === TJwtErrors.JWT_SECRET_NOT_FOUND) {
       return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

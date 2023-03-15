@@ -1,7 +1,7 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const existsCnpjCpf = async (cnpj_cpf: string, excludesId: number[] = []): Promise<boolean | Error> => {
+export const existsCnpjCpf = async (cnpj_cpf: string, excludesId: string[] = []): Promise<boolean | Error> => {
   try {
     const result = await Knex(ETableNames.pessoa)
       .select('id')

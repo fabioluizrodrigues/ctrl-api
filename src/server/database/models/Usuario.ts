@@ -1,12 +1,5 @@
 export interface IUsuario {
-  id: number;
-  nome: string;
-  username: string;
-  password: string;
-  pessoa_id?: number;
-}
-
-export interface IUsuarioCreate {
+  id: string;
   nome: string;
   cpf: string;
   email: string;
@@ -14,6 +7,7 @@ export interface IUsuarioCreate {
   username: string;
   password: string;
 }
+
 
 export interface IUsuarioLogin {
   username: string;

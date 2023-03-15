@@ -6,7 +6,7 @@ import { CidadesProvider } from '../../database/providers/cidades';
 import { validation } from '../../shared/middleware';
 
 interface IParamProps {
-  id?: number;
+  id?: string;
 }
 
 interface IBodyProps extends Omit<ICidade, 'id'> { }
@@ -16,7 +16,7 @@ export const updateByIdValidation = validation((getSchema) => ({
     nome: yup.string().required().min(3).max(150),
   })),
   params: getSchema<IParamProps>(yup.object().shape({
-    id: yup.number().integer().required().moreThan(0)
+    id: yup.string().required().uuid()
   }))
 }));
 

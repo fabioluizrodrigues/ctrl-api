@@ -1,19 +1,11 @@
 import { ETableNames } from '../../ETableNames';
-import { UsuariosProvider } from '../usuarios';
-import { IOrganizacao } from '../../models';
 import { Knex } from '../../knex';
+import { IOrganizacao } from '../../models';
 
-export const updateById = async (id: number, organizacao: Omit<IOrganizacao, 'id'>): Promise<void | Error> => {
+export const updateById = async (id: string, organizacao: Omit<IOrganizacao, 'id' | 'usuario_adm_id'>): Promise<void | Error> => {
   try {
-    if (!await UsuariosProvider.existsId(organizacao.usuario_adm_id as number)) {
-      return new Error('O usuário informado não foi encontrato.');
-    }
-
     const result = await Knex(ETableNames.organizacao)
-      .update({
-        nome: organizacao.nome,
-        usuario_adm_id: organizacao.usuario_adm_id
-      })
+      .update({ nome: organizacao.nome })
       .where('id', '=', id);
 
     if (result) return;

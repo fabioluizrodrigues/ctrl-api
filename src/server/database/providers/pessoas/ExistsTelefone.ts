@@ -1,7 +1,7 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const existsTelefone = async (telefone: string, excludesId: number[] = []): Promise<Boolean | Error> => {
+export const existsTelefone = async (telefone: string, excludesId: string[] = []): Promise<Boolean | Error> => {
   try {
     const result = await Knex(ETableNames.pessoa)
       .select('id')

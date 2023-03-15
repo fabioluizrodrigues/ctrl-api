@@ -6,7 +6,7 @@ import { existsEmail } from './ExistsEmail';
 import { IPessoa } from '../../models';
 import { Knex } from '../../knex';
 
-export const updateById = async (id: number, pessoa: Omit<IPessoa, 'id'>): Promise<void | Error> => {
+export const updateById = async (id: string, pessoa: Omit<IPessoa, 'id'>): Promise<void | Error> => {
   try {
     if (await existsCnpjCpf(pessoa.cnpj_cpf, [id])) {
       return new Error('O CNPJ/CPF informado já consta no cadastro.');
@@ -20,7 +20,7 @@ export const updateById = async (id: number, pessoa: Omit<IPessoa, 'id'>): Promi
       return new Error('O Telefone informado já consta no cadastro.');
     }
 
-    if (!await CidadesProvider.existsId(pessoa.cidade_id as number)) {
+    if (!await CidadesProvider.existsId(pessoa.cidade_id as string)) {
       return new Error('A cidade informada no cadastro não foi encontrata.');
     }
 

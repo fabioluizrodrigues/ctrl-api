@@ -3,7 +3,7 @@ import { Knex } from '../../knex';
 import { IVeiculo } from '../../models';
 import { existsPlaca } from './ExistsPlaca';
 
-export const updateById = async (id: number, veiculo: Omit<IVeiculo, 'id'>): Promise<void | Error> => {
+export const updateById = async (id: string, veiculo: Omit<IVeiculo, 'id'>): Promise<void | Error> => {
   try {
     if (await existsPlaca(veiculo.placa, [id])) {
       return new Error(`A placa ${veiculo.placa} já consta no cadastro.`);

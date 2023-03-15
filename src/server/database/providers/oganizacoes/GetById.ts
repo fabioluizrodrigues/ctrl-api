@@ -2,7 +2,7 @@ import { ETableNames } from '../../ETableNames';
 import { IOrganizacao } from '../../models';
 import { Knex } from '../../knex';
 
-export const getById = async (id: number): Promise<IOrganizacao | Error> => {
+export const getById = async (id: string): Promise<IOrganizacao | Error> => {
   try {
     const result = await Knex(ETableNames.organizacao)
       .select('*')

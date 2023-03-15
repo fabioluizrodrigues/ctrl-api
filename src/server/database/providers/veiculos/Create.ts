@@ -2,15 +2,19 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IVeiculo } from '../../models';
 import { existsPlaca } from './ExistsPlaca';
+import { v4 as uuid } from 'uuid';
 
-export const create = async (veiculo: Omit<IVeiculo, 'id'>): Promise<number | Error> => {
+export const create = async (veiculo: Omit<IVeiculo, 'id'>): Promise<string | Error> => {
   try {
     if (await existsPlaca(veiculo.placa)) {
       return new Error(`A placa ${veiculo.placa} já consta no cadastro.`);
     }
 
-    const [result] = await Knex(ETableNames.veiculo)
+    const newId = uuid();
+
+    await Knex(ETableNames.veiculo)
       .insert({
+        id: newId,
         placa: veiculo.placa.toUpperCase(),
         renavam: veiculo.renavam,
         nr_eixos: veiculo.nr_eixos,
@@ -21,16 +25,10 @@ export const create = async (veiculo: Omit<IVeiculo, 'id'>): Promise<number | Er
         modelo: veiculo.modelo,
         cor: veiculo.cor,
         observacoes: veiculo.observacoes
-      })
-      .returning('id');
+      });
 
-    if (typeof result === 'object') {
-      return result.id;
-    } else if (typeof result === 'number') {
-      return result;
-    }
+    return newId;
 
-    return new Error('Erro ao cadastrar o registro');
   } catch (error) {
     console.log(error);
     return Error('Erro ao cadastrar o registro');

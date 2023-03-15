@@ -7,13 +7,14 @@ import { VeiculosProvider } from '../../database/providers/veiculos';
 import { validation } from '../../shared/middleware';
 
 interface IParamProps {
-  id?: number;
+  id?: string;
 }
 
 interface IBodyProps extends Omit<IVeiculo, 'id'> { }
 
 export const updateByIdValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
+    organizacao_id: yup.string().required().uuid(),
     placa: yup.string().required()
       .test(
         'is-valid-plate',
@@ -31,7 +32,7 @@ export const updateByIdValidation = validation((getSchema) => ({
     observacoes: yup.string().notRequired().min(3).max(255)
   })),
   params: getSchema<IParamProps>(yup.object().shape({
-    id: yup.number().integer().required().moreThan(0)
+    id: yup.string().required().uuid()
   }))
 }));
 

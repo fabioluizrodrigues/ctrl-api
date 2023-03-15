@@ -1,7 +1,8 @@
 import * as jwt from 'jsonwebtoken';
 
-interface IJwtData {
-  uid: number;
+export interface IJwtData {
+  uid: string;
+  oid?: string;
 }
 
 export enum TJwtErrors {

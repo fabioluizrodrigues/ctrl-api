@@ -1,7 +1,7 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const deleteById = async (id: number): Promise<void | Error> => {
+export const deleteById = async (id: string): Promise<void | Error> => {
   try {
     const result = await Knex(ETableNames.veiculo).where('id', '=', id).del();
     if (result > 0) return;

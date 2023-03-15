@@ -2,7 +2,7 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { ICidade } from '../../models';
 
-export const getAll = async (page: number, limit: number, filter: string, id = 0): Promise<ICidade[] | Error> => {
+export const getAll = async (page: number, limit: number, filter: string, id = ''): Promise<ICidade[] | Error> => {
 
   try {
     const result = await Knex(ETableNames.cidade)
@@ -12,7 +12,7 @@ export const getAll = async (page: number, limit: number, filter: string, id = 0
       .offset((page - 1) * limit)
       .limit(limit);
 
-    if (id > 0 && result.every(item => item.id !== id)) {
+    if (id.length > 0 && result.every(item => item.id !== id)) {
       const resultById = await Knex(ETableNames.cidade)
         .select('id', 'nome')
         .where('id', '=', id)

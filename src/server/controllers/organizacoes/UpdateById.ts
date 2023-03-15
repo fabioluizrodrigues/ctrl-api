@@ -6,18 +6,17 @@ import { OrganizacoesProvider } from '../../database/providers/oganizacoes';
 import { validation } from '../../shared/middleware';
 
 interface IParamProps {
-  id?: number;
+  id?: string;
 }
 
-interface IBodyProps extends Omit<IOrganizacao, 'id'> { }
+interface IBodyProps extends Omit<IOrganizacao, 'id' | 'usuario_adm_id'> { }
 
 export const updateByIdValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
     nome: yup.string().required().min(3).max(200),
-    usuario_adm_id: yup.number().required()
   })),
   params: getSchema<IParamProps>(yup.object().shape({
-    id: yup.number().integer().required().moreThan(0)
+    id: yup.string().required().uuid()
   }))
 }));
 

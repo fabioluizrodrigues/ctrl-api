@@ -1,5 +1,5 @@
 
 export interface ICidade {
-  id: number;
+  id: string;
   nome: string;
 }

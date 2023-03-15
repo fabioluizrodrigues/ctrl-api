@@ -1,7 +1,7 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 
-export const existsId = async (id: number): Promise<Boolean | Error> => {
+export const existsId = async (id: string): Promise<Boolean | Error> => {
   try {
     const result = await Knex(ETableNames.veiculo).select('id').where('id', '=', id).first();
     if (!result) return false;

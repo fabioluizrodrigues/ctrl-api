@@ -5,12 +5,12 @@ import { OrganizacoesProvider } from '../../database/providers/oganizacoes';
 import { validation } from '../../shared/middleware';
 
 interface IParamProps {
-  id?: number;
+  id?: string;
 }
 
 export const deleteByIdValidation = validation((getSchema) => ({
   params: getSchema<IParamProps>(yup.object().shape({
-    id: yup.number().integer().required().moreThan(0)
+    id: yup.string().required().uuid()
   }))
 }));
 

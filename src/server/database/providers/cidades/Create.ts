@@ -1,18 +1,21 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { ICidade } from '../../models';
+import { v4 as uuid } from 'uuid';
 
-export const create = async (cidade: Omit<ICidade, 'id'>): Promise<number | Error> => {
+export const create = async (cidade: Omit<ICidade, 'id'>): Promise<string | Error> => {
   try {
-    const [result] = await Knex(ETableNames.cidade).insert(cidade).returning('id');
 
-    if (typeof result === 'object') {
-      return result.id;
-    } else if (typeof result === 'number') {
-      return result;
-    }
+    const newId = uuid();
 
-    return new Error('Erro ao cadastrar o registro');
+    await Knex(ETableNames.cidade)
+      .insert({
+        id: newId,
+        nome: cidade.nome
+      });
+
+    return newId;
+    
   } catch (error) {
     console.log(error);
     return Error('Erro ao cadastrar o registro');

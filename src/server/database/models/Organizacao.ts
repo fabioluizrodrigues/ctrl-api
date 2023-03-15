@@ -1,6 +1,6 @@
 
 export interface IOrganizacao {
-  id: number;
+  id: string;
   nome: string;
-  usuario_adm_id: number;
+  usuario_adm_id: string;
 }

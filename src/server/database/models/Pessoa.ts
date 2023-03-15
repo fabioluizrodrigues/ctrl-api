@@ -1,5 +1,6 @@
 export interface IPessoa {
-  id: number;
+  id: string;
+  organizacao_id: string;
   cnpj_cpf: string;
   nome_razao: string;
   email: string;
@@ -7,7 +8,7 @@ export interface IPessoa {
   ie_rg?: string;
   cep?: string;
   estado?: string;
-  cidade_id?: number;
+  cidade_id?: string;
   bairro?: string;
   logradouro?: string;
   numero?: string;

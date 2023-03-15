@@ -11,6 +11,7 @@ interface IBodyProps extends Omit<IPessoa, 'id'> { }
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
+    organizacao_id: yup.string().required().uuid(),
     cnpj_cpf: yup.string().required()
       .test(
         'is-valid-cnpj-cpf',
@@ -28,7 +29,7 @@ export const createValidation = validation((getSchema) => ({
     ie_rg: yup.string().optional(),
     cep: yup.string().optional(),
     estado: yup.string().optional().min(2).max(2),
-    cidade_id: yup.number().optional(),
+    cidade_id: yup.string().optional().uuid(),
     bairro: yup.string().optional(),
     logradouro: yup.string().optional(),
     numero: yup.string().optional(),

@@ -1,15 +1,16 @@
 import { PasswordCrypto } from '../../../shared/services';
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
-import { IUsuarioCreate } from '../../models';
-import { existsCnpjCpf } from '../pessoas/ExistsCnpjCpf';
-import { existsEmail } from '../pessoas/ExistsEmail';
-import { existsTelefone } from '../pessoas/ExistsTelefone';
+import { IUsuario } from '../../models';
 import { existsUsername } from './ExistsUsername';
+import { v4 as uuid } from 'uuid';
+import { existsCpf } from './ExistsCpf';
+import { existsEmail } from './ExistsEmail';
+import { existsTelefone } from './ExistsTelefone';
 
-export const create = async (usuarioCreate: IUsuarioCreate): Promise<number | Error> => {
+export const create = async (usuarioCreate: IUsuario): Promise<string | Error> => {
   try {
-    if (await existsCnpjCpf(usuarioCreate.cpf)) {
+    if (await existsCpf(usuarioCreate.cpf)) {
       return new Error(`O CPF ${usuarioCreate.cpf} já existe no cadastro.`);
     }
 
@@ -23,35 +24,32 @@ export const create = async (usuarioCreate: IUsuarioCreate): Promise<number | Er
 
     if (await existsUsername(usuarioCreate.username)) {
       return new Error(`O username ${usuarioCreate.username} já existe no cadastro.`);
-    }    
-
-    const [resultPessoa] = await Knex(ETableNames.pessoa)
-      .insert({
-        cnpj_cpf: usuarioCreate.cpf,
-        nome_razao: usuarioCreate.nome,
-        email: usuarioCreate.email,
-        telefone: usuarioCreate.telefone
-      })
-      .returning('id');
+    }
 
     const hashedPassword = await PasswordCrypto.hashPassword(usuarioCreate.password);
 
-    const [result] = await Knex(ETableNames.usuario)
+    const newId = uuid();
+
+    await Knex(ETableNames.usuario)
       .insert({
+        id: newId,
         nome: usuarioCreate.nome,
+        cpf: usuarioCreate.cpf,
+        email: usuarioCreate.email,
+        telefone: usuarioCreate.telefone,
         username: usuarioCreate.username,
         password: hashedPassword,
-        pessoa_id: resultPessoa.id
-      })
-      .returning('id');
+      });
 
-    if (typeof result === 'object') {
-      return result.id;
-    } else if (typeof result === 'number') {
-      return result;
-    }
+    return newId;
 
-    return new Error('Erro ao cadastrar o registro');
+    /*     if (typeof result === 'object') {
+          return result.id;
+        } else if (typeof result === 'number') {
+          return result;
+        } 
+
+    return new Error('Erro ao cadastrar o registro');*/
   } catch (error) {
     console.log(error);
     return Error('Erro ao cadastrar o registro');

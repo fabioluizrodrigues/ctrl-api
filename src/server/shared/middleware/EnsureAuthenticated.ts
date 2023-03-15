@@ -36,8 +36,9 @@ export const ensureAuthenticated: RequestHandler = async (req, res, next) => {
       errors: { default: UNAUTHORIZED_ERROR_MESSAGE }
     });
   }
-  
-  req.headers.idUsuario = JwtData.uid.toString();
+
+  req.headers.usuario_id = JwtData.uid.toString();
+  req.headers.organizacao_id = JwtData.oid?.toString();
 
   return next();
 };

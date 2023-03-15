@@ -1,5 +1,6 @@
 export interface IVeiculo {
-  id: number;
+  id: string;
+  organizacao_id: string;
   placa: string;
   renavam: string;
   nr_eixos: number;

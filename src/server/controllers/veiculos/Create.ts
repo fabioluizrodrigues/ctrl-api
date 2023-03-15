@@ -10,6 +10,7 @@ interface IBodyProps extends Omit<IVeiculo, 'id'> { }
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
+    organizacao_id: yup.string().required().uuid(),
     placa: yup.string().required()
       .test('is-valid-plate',
         'O formato da placa é inválido.',

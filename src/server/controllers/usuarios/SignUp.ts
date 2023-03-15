@@ -2,11 +2,11 @@ import { isValidCNPJ, isValidCPF, isValidMobilePhone } from '@brazilian-utils/br
 import { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
-import { IUsuarioCreate } from '../../database/models';
+import { IUsuario } from '../../database/models';
 import { UsuariosProvider } from '../../database/providers/usuarios';
 import { validation } from '../../shared/middleware';
 
-interface IBodyProps extends IUsuarioCreate { }
+interface IBodyProps extends Omit<IUsuario, 'id'> { }
 
 export const signUpValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
@@ -29,7 +29,7 @@ export const signUpValidation = validation((getSchema) => ({
   }))
 }));
 
-export const signUp = async (req: Request<{}, {}, IUsuarioCreate>, res: Response) => {
+export const signUp = async (req: Request<{}, {}, IUsuario>, res: Response) => {
 
   const result = await UsuariosProvider.create(req.body);
 

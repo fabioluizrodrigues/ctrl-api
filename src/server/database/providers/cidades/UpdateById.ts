@@ -2,10 +2,12 @@ import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { ICidade } from '../../models';
 
-export const updateById = async (id: number, cidade: Omit<ICidade, 'id'>): Promise<void | Error> => {
+export const updateById = async (id: string, cidade: Omit<ICidade, 'id'>): Promise<void | Error> => {
   try {
     const result = await Knex(ETableNames.cidade)
-      .update(cidade)
+      .update({
+        nome: cidade.nome
+      })
       .where('id', '=', id);
 
     if (result) return;
