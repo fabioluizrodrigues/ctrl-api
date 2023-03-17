@@ -1,7 +1,13 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
+import { existsId } from './ExistsId';
 
 export const deleteById = async (id: string): Promise<void | Error> => {
+
+  if (!await existsId(id)) {
+    return new Error('Registro não encontrado.');
+  }
+
   try {
     const result = await Knex(ETableNames.permissao).where('id', '=', id).del();
     if (result > 0) return;

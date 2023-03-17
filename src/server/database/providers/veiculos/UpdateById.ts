@@ -1,10 +1,14 @@
 import { ETableNames } from '../../ETableNames';
 import { Knex } from '../../knex';
 import { IVeiculo } from '../../models';
+import { existsId } from './ExistsId';
 import { existsPlaca } from './ExistsPlaca';
 
 export const updateById = async (id: string, veiculo: Omit<IVeiculo, 'id'>): Promise<void | Error> => {
   try {
+    if (!await existsId(id)) {
+      return new Error('Registro não encontrado.');
+    }
     if (await existsPlaca(veiculo.placa, [id])) {
       return new Error(`A placa ${veiculo.placa} já consta no cadastro.`);
     }

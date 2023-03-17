@@ -5,9 +5,14 @@ import { CidadesProvider } from '../cidades';
 import { existsEmail } from './ExistsEmail';
 import { IPessoa } from '../../models';
 import { Knex } from '../../knex';
+import { existsPessoaId } from './ExistsPessoaId';
 
 export const updateById = async (id: string, pessoa: Omit<IPessoa, 'id' | 'organizacao_id'>): Promise<void | Error> => {
   try {
+    if (!await existsPessoaId(id)) {
+      return new Error('Registro não encontrado.');
+    }
+
     if (await existsCnpjCpf(pessoa.cnpj_cpf, [id])) {
       return new Error('O CNPJ/CPF informado já consta no cadastro.');
     }
