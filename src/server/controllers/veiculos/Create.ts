@@ -6,11 +6,10 @@ import { IVeiculo } from '../../database/models';
 import { VeiculosProvider } from '../../database/providers/veiculos';
 import { validation } from '../../shared/middleware';
 
-interface IBodyProps extends Omit<IVeiculo, 'id'> { }
+interface IBodyProps extends Omit<IVeiculo, 'id' | 'organizacao_id'> { }
 
 export const createValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
-    organizacao_id: yup.string().required().uuid(),
     placa: yup.string().required()
       .test('is-valid-plate',
         'O formato da placa é inválido.',
@@ -29,8 +28,22 @@ export const createValidation = validation((getSchema) => ({
 }));
 
 export const create = async (req: Request<{}, {}, IVeiculo>, res: Response) => {
-  
-  const result = await VeiculosProvider.create(req.body);
+
+  const veiculo: Omit<IVeiculo, 'id'> = {
+    organizacao_id: String(req.headers.organizacao_id),
+    placa: req.body.placa,
+    renavam: req.body.renavam,
+    nr_eixos: req.body.nr_eixos,
+    ano_fabrica: req.body.ano_fabrica,
+    ano_modelo: req.body.ano_modelo,
+    ano_exercicio: req.body.ano_exercicio,
+    marca: req.body.marca,
+    modelo: req.body.modelo,
+    cor: req.body.cor,
+    observacoes: req.body.observacoes
+  };
+
+  const result = await VeiculosProvider.create(veiculo);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

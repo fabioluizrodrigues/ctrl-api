@@ -10,7 +10,7 @@ interface IParamProps {
 
 export const getByIdValidation = validation(getSchema => ({
   params: getSchema<IParamProps>(yup.object().shape({
-    id: yup.string().required().uuid(),
+    id: yup.string().required(),
   })),
 }));
 

@@ -6,7 +6,7 @@ import { existsEmail } from './ExistsEmail';
 import { IPessoa } from '../../models';
 import { Knex } from '../../knex';
 
-export const updateById = async (id: string, pessoa: Omit<IPessoa, 'id'>): Promise<void | Error> => {
+export const updateById = async (id: string, pessoa: Omit<IPessoa, 'id' | 'organizacao_id'>): Promise<void | Error> => {
   try {
     if (await existsCnpjCpf(pessoa.cnpj_cpf, [id])) {
       return new Error('O CNPJ/CPF informado já consta no cadastro.');
@@ -20,13 +20,35 @@ export const updateById = async (id: string, pessoa: Omit<IPessoa, 'id'>): Promi
       return new Error('O Telefone informado já consta no cadastro.');
     }
 
-    if (!await CidadesProvider.existsId(pessoa.cidade_id as string)) {
-      return new Error('A cidade informada no cadastro não foi encontrata.');
+    if ((pessoa.cidade_id) && (pessoa.cidade_id.length > 0)) {
+      if (!await CidadesProvider.existsId(pessoa.cidade_id as string)) {
+        return new Error('A cidade informada no cadastro não foi encontrata.');
+      }
     }
 
-    const result = await Knex(ETableNames.pessoa)
-      .update(pessoa)
-      .where('id', '=', id);
+    const pessoaUpdate: IPessoa = {} as IPessoa;
+
+    pessoaUpdate.cnpj_cpf = pessoa.cnpj_cpf;
+    pessoaUpdate.nome_razao = pessoa.nome_razao;
+    pessoaUpdate.email = pessoa.email;
+    pessoaUpdate.telefone = pessoa.telefone;
+    pessoaUpdate.ie_rg = pessoa.ie_rg;
+    pessoaUpdate.cep = pessoa.cep;
+    pessoaUpdate.estado = pessoa.estado;
+
+    if (pessoa.cidade_id) {
+      pessoaUpdate.cidade_id = pessoa.cidade_id;
+    } else {
+      pessoaUpdate.cidade_id = undefined;
+    }
+
+    pessoaUpdate.bairro = pessoa.bairro;
+    pessoaUpdate.logradouro = pessoa.logradouro;
+    pessoaUpdate.numero = pessoa.numero;
+    pessoaUpdate.complemento = pessoa.complemento;
+    pessoaUpdate.observacoes = pessoa.observacoes;
+
+    const result = await Knex(ETableNames.pessoa).update(pessoaUpdate).where('id', '=', id);
 
     if (result) return;
     return new Error('Erro ao atualizar o registro');

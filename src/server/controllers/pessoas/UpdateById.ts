@@ -10,11 +10,10 @@ interface IParamProps {
   id?: string;
 }
 
-interface IBodyProps extends Omit<IPessoa, 'id'> { }
+interface IBodyProps extends Omit<IPessoa, 'id' | 'organizacao_id'> { }
 
 export const updateByIdValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
-    organizacao_id: yup.string().required().uuid(),
     cnpj_cpf: yup.string().required()
       .test(
         'is-valid-cnpj-cpf',
@@ -32,7 +31,7 @@ export const updateByIdValidation = validation((getSchema) => ({
     ie_rg: yup.string().optional(),
     cep: yup.string().optional(),
     estado: yup.string().optional().min(2).max(2),
-    cidade_id: yup.string().optional().uuid(),
+    cidade_id: yup.string().optional(),
     bairro: yup.string().optional(),
     logradouro: yup.string().optional(),
     numero: yup.string().optional(),
@@ -40,7 +39,7 @@ export const updateByIdValidation = validation((getSchema) => ({
     observacoes: yup.string().optional(),
   })),
   params: getSchema<IParamProps>(yup.object().shape({
-    id: yup.string().required().uuid()
+    id: yup.string().required()
   }))
 }));
 

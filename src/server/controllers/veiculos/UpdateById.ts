@@ -10,11 +10,10 @@ interface IParamProps {
   id?: string;
 }
 
-interface IBodyProps extends Omit<IVeiculo, 'id'> { }
+interface IBodyProps extends Omit<IVeiculo, 'id' | 'organizacao_id'> { }
 
 export const updateByIdValidation = validation((getSchema) => ({
   body: getSchema<IBodyProps>(yup.object().shape({
-    organizacao_id: yup.string().required().uuid(),
     placa: yup.string().required()
       .test(
         'is-valid-plate',
@@ -23,13 +22,13 @@ export const updateByIdValidation = validation((getSchema) => ({
       ),
     renavam: yup.string().required().max(20),
     nr_eixos: yup.number().required().min(2),
-    ano_fabrica: yup.number().notRequired(),
-    ano_modelo: yup.number().notRequired(),
-    ano_exercicio: yup.number().notRequired(),
-    marca: yup.string().notRequired().min(3).max(150),
-    modelo: yup.string().notRequired().min(3).max(150),
-    cor: yup.string().notRequired().min(3).max(100),
-    observacoes: yup.string().notRequired().min(3).max(255)
+    ano_fabrica: yup.number().optional(),
+    ano_modelo: yup.number().optional(),
+    ano_exercicio: yup.number().optional(),
+    marca: yup.string().optional().min(3).max(150),
+    modelo: yup.string().optional().min(3).max(150),
+    cor: yup.string().optional().min(3).max(100),
+    observacoes: yup.string().optional().min(3).max(255)
   })),
   params: getSchema<IParamProps>(yup.object().shape({
     id: yup.string().required().uuid()
@@ -46,7 +45,22 @@ export const updateById = async (req: Request<IParamProps, {}, IBodyProps>, res:
     });
   }
 
-  const result = await VeiculosProvider.updateById(req.params.id, req.body);
+  const veiculo: Omit<IVeiculo, 'id'> = {
+    organizacao_id: String(req.headers.organizacao_id),
+    placa: req.body.placa,
+    renavam: req.body.renavam,
+    nr_eixos: req.body.nr_eixos,
+    ano_fabrica: req.body.ano_fabrica,
+    ano_modelo: req.body.ano_modelo,
+    ano_exercicio: req.body.ano_exercicio,
+    marca: req.body.marca,
+    modelo: req.body.modelo,
+    cor: req.body.cor,
+    observacoes: req.body.observacoes
+  };
+
+
+  const result = await VeiculosProvider.updateById(req.params.id, veiculo);
 
   if (result instanceof Error) {
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({

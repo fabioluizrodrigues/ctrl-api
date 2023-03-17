@@ -12,20 +12,22 @@ export const create = async (veiculo: Omit<IVeiculo, 'id'>): Promise<string | Er
 
     const newId = uuid();
 
-    await Knex(ETableNames.veiculo)
-      .insert({
-        id: newId,
-        placa: veiculo.placa.toUpperCase(),
-        renavam: veiculo.renavam,
-        nr_eixos: veiculo.nr_eixos,
-        ano_fabrica: veiculo.ano_fabrica,
-        ano_modelo: veiculo.ano_modelo,
-        ano_exercicio: veiculo.ano_exercicio,
-        marca: veiculo.marca,
-        modelo: veiculo.modelo,
-        cor: veiculo.cor,
-        observacoes: veiculo.observacoes
-      });
+    const veiculoInsert: IVeiculo = {} as IVeiculo;
+
+    veiculoInsert.id = newId, 
+    veiculoInsert.organizacao_id = veiculo.organizacao_id,
+    veiculoInsert.placa = veiculo.placa.trim().toUpperCase(),
+    veiculoInsert.renavam = veiculo.renavam,
+    veiculoInsert.nr_eixos = veiculo.nr_eixos,
+    veiculoInsert.ano_fabrica = veiculo.ano_fabrica,
+    veiculoInsert.ano_modelo = veiculo.ano_modelo,
+    veiculoInsert.ano_exercicio = veiculo.ano_exercicio,
+    veiculoInsert.marca = veiculo.marca,
+    veiculoInsert.modelo = veiculo.modelo,
+    veiculoInsert.cor = veiculo.cor,
+    veiculoInsert.observacoes = veiculo.observacoes;
+
+    await Knex(ETableNames.veiculo).insert(veiculoInsert);
 
     return newId;
 

@@ -9,19 +9,21 @@ export const updateById = async (id: string, veiculo: Omit<IVeiculo, 'id'>): Pro
       return new Error(`A placa ${veiculo.placa} já consta no cadastro.`);
     }
 
+    const veiculoUpdate: IVeiculo = {} as IVeiculo;
+
+    veiculoUpdate.placa = veiculo.placa.toUpperCase(),
+    veiculoUpdate.renavam = veiculo.renavam,
+    veiculoUpdate.nr_eixos = veiculo.nr_eixos,
+    veiculoUpdate.ano_fabrica = veiculo.ano_fabrica,
+    veiculoUpdate.ano_modelo = veiculo.ano_modelo,
+    veiculoUpdate.ano_exercicio = veiculo.ano_exercicio,
+    veiculoUpdate.marca = veiculo.marca,
+    veiculoUpdate.modelo = veiculo.modelo,
+    veiculoUpdate.cor = veiculo.cor,
+    veiculoUpdate.observacoes = veiculo.observacoes;
+
     const result = await Knex(ETableNames.veiculo)
-      .update({
-        placa: veiculo.placa.toUpperCase(),
-        renavam: veiculo.renavam,
-        nr_eixos: veiculo.nr_eixos,
-        ano_fabrica: veiculo.ano_fabrica,
-        ano_modelo: veiculo.ano_modelo,
-        ano_exercicio: veiculo.ano_exercicio,
-        marca: veiculo.marca,
-        modelo: veiculo.modelo,
-        cor: veiculo.cor,
-        observacoes: veiculo.observacoes
-      })
+      .update(veiculoUpdate)
       .where('id', '=', id);
 
     if (result) return;
