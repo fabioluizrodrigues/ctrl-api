@@ -5,11 +5,10 @@ export async function up(knex: Knex) {
   return knex
     .schema
     .createTable(ETableNames.organizacao, table => {
-      table.uuid('id').primary().index();
+      table.uuid('id').primary().index().notNullable();
       table.string('nome', 200).notNullable();
       table.uuid('usuario_adm_id').references('id').inTable(ETableNames.usuario).index();
       table.string('situacao', 3);
-      table.timestamps(true, true);
     })
     .then(() => {
       console.log(`# Created table ${ETableNames.organizacao}`);

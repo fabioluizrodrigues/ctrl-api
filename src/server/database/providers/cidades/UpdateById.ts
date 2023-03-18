@@ -10,7 +10,8 @@ export const updateById = async (id: string, cidade: Omit<ICidade, 'id'>): Promi
     }
     const result = await Knex(ETableNames.cidade)
       .update({
-        nome: cidade.nome
+        nome: cidade.nome,
+        uf: cidade.uf
       })
       .where('id', '=', id);
 

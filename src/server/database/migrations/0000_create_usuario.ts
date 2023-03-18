@@ -5,7 +5,7 @@ export async function up(knex: Knex) {
   return knex
     .schema
     .createTable(ETableNames.usuario, table => {
-      table.uuid('id').primary().index();
+      table.uuid('id').primary().index().notNullable();
       table.string('nome', 200).notNullable();
       table.string('cpf', 20).index().unique().notNullable();
       table.string('email', 255).notNullable();
@@ -13,7 +13,6 @@ export async function up(knex: Knex) {
       table.string('username', 100).index().unique().notNullable();
       table.string('password', 100).notNullable();
       table.boolean('ativo').defaultTo(true);
-      table.timestamps(true, true);      
     })
     .then(() => {
       console.log(`# Created table ${ETableNames.usuario}`);

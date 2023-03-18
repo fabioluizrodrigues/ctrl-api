@@ -5,10 +5,9 @@ export async function up(knex: Knex) {
   return knex
     .schema
     .createTable(ETableNames.permissao, table => {
-      table.uuid('id').primary().index();
+      table.uuid('id').primary().index().notNullable();
       table.string('nome', 150).index().notNullable();
       table.string('descricao', 150);
-      table.timestamps(true, true);
     })
     .then(() => {
       console.log(`# Created table ${ETableNames.permissao}`);

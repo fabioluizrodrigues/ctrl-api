@@ -5,7 +5,7 @@ export async function up(knex: Knex) {
   return knex
     .schema
     .createTable(ETableNames.veiculo, table => {
-      table.uuid('id').primary().index();
+      table.uuid('id').primary().index().notNullable();
 
       table.uuid('organizacao_id').references('id').inTable(ETableNames.organizacao);
 
@@ -19,8 +19,6 @@ export async function up(knex: Knex) {
       table.string('modelo', 150).nullable();
       table.string('cor', 100).nullable();
       table.string('observacoes', 255).nullable();
-
-      table.timestamps(true, true); 
     })
     .then(() => {
       console.log(`# Created table ${ETableNames.veiculo}`);

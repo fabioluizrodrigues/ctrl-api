@@ -11,7 +11,8 @@ export const create = async (cidade: Omit<ICidade, 'id'>): Promise<string | Erro
     await Knex(ETableNames.cidade)
       .insert({
         id: newId,
-        nome: cidade.nome
+        nome: cidade.nome,
+        uf: cidade.uf
       });
 
     return newId;
