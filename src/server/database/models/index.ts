@@ -5,3 +5,7 @@ export * from './Veiculo';
 export * from './Organizacao';
 export * from './Permissao';
 export * from './Funcao';
+export * from './Empresa';
+export * from './UsuarioPermissao';
+export * from './UsuarioFuncao';
+export * from './FuncaoPermissao';
