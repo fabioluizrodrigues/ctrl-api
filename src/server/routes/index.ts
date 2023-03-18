@@ -9,6 +9,10 @@ import {
 } from '../controllers';
 import { PermissoesController } from '../controllers/permissoes';
 import { FuncoesController } from '../controllers/funcoes';
+import { EmpresasController } from '../controllers/empresas';
+import { FuncoesPermissoesController } from '../controllers/funcoes_permissoes';
+import { UsuariosFuncoesController } from '../controllers/usuarios_funcoes';
+import { UsuariosPermissoesController } from '../controllers/usuarios_permissoes';
 
 const router = Router();
 
@@ -51,6 +55,21 @@ router.post('/organizacoes', ensureAuthenticated, OrganizacoesController.createV
 router.get('/organizacoes/:id', ensureAuthenticated, OrganizacoesController.getByIdValidation, OrganizacoesController.getById);
 router.put('/organizacoes/:id', ensureAuthenticated, OrganizacoesController.updateByIdValidation, OrganizacoesController.updateById);
 router.delete('/organizacoes/:id', ensureAuthenticated, OrganizacoesController.deleteByIdValidation, OrganizacoesController.deleteById);
+
+router.get('/empresas', ensureAuthenticated, EmpresasController.getAllValidation, EmpresasController.getAll);
+router.post('/empresas', ensureAuthenticated, EmpresasController.createValidation, EmpresasController.create);
+router.get('/empresas/:id', ensureAuthenticated, EmpresasController.getByIdValidation, EmpresasController.getById);
+router.put('/empresas/:id', ensureAuthenticated, EmpresasController.updateByIdValidation, EmpresasController.updateById);
+router.delete('/empresas/:id', ensureAuthenticated, EmpresasController.deleteByIdValidation, EmpresasController.deleteById);
+
+router.post('/funcoes-permissoes', ensureAuthenticated, FuncoesPermissoesController.createValidation, FuncoesPermissoesController.create);
+router.delete('/funcoes-permissoes', ensureAuthenticated, FuncoesPermissoesController.removeValidation, FuncoesPermissoesController.remove);
+
+router.post('/usuarios-funcoes', ensureAuthenticated, UsuariosFuncoesController.createValidation, UsuariosFuncoesController.create);
+router.delete('/usuarios-funcoes', ensureAuthenticated, UsuariosFuncoesController.removeValidation, UsuariosFuncoesController.remove);
+
+router.post('/usuarios-permissoes', ensureAuthenticated, UsuariosPermissoesController.createValidation, UsuariosPermissoesController.create);
+router.delete('/usuarios-permissoes', ensureAuthenticated, UsuariosPermissoesController.removeValidation, UsuariosPermissoesController.remove);
 
 router.post('/entrar', UsuariosController.signInValidation, UsuariosController.signIn);
 router.post('/registrar', UsuariosController.signUpValidation, UsuariosController.signUp);
