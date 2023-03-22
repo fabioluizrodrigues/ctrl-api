@@ -1,5 +1,6 @@
 import {
   ICidade,
+  IConta,
   IEmpresa,
   IFuncao,
   IFuncaoPermissao,
@@ -26,5 +27,6 @@ declare module 'knex/types/tables' {
     usuario_permissao: IUsuarioPermissao,
     usuario_funcao: IUsuarioFuncao,
     funcao_permissao: IFuncaoPermissao,
+    conta: IConta,
   }
 }

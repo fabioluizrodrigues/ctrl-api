@@ -1,4 +1,4 @@
-import { ensureAuthenticated } from '../shared/middleware';
+import { can, ensureAuthenticated, is } from '../shared/middleware';
 import { Router } from 'express';
 import {
   CidadesController,
@@ -13,6 +13,7 @@ import { EmpresasController } from '../controllers/empresas';
 import { FuncoesPermissoesController } from '../controllers/funcoes_permissoes';
 import { UsuariosFuncoesController } from '../controllers/usuarios_funcoes';
 import { UsuariosPermissoesController } from '../controllers/usuarios_permissoes';
+import { ContasController } from '../controllers/contas';
 
 const router = Router();
 
@@ -20,9 +21,9 @@ router.get('/', (_, res) => {
   return res.send('Server running...');
 });
 
-router.get('/cidades', ensureAuthenticated, CidadesController.getAllValidation, CidadesController.getAll);
+router.get('/cidades', ensureAuthenticated, can(['create_product', 'list_product']), CidadesController.getAllValidation, CidadesController.getAll);
 router.post('/cidades', ensureAuthenticated, CidadesController.createValidation, CidadesController.create);
-router.get('/cidades/:id', ensureAuthenticated, CidadesController.getByIdValidation, CidadesController.getById);
+router.get('/cidades/:id', ensureAuthenticated, is(['admin']), CidadesController.getByIdValidation, CidadesController.getById);
 router.put('/cidades/:id', ensureAuthenticated, CidadesController.updateByIdValidation, CidadesController.updateById);
 router.delete('/cidades/:id', ensureAuthenticated, CidadesController.deleteByIdValidation, CidadesController.deleteById);
 
@@ -70,6 +71,9 @@ router.delete('/usuarios-funcoes', ensureAuthenticated, UsuariosFuncoesControlle
 
 router.post('/usuarios-permissoes', ensureAuthenticated, UsuariosPermissoesController.createValidation, UsuariosPermissoesController.create);
 router.delete('/usuarios-permissoes', ensureAuthenticated, UsuariosPermissoesController.removeValidation, UsuariosPermissoesController.remove);
+
+router.post('/contas', ensureAuthenticated, ContasController.createValidation, ContasController.create);
+router.put('/conta-block/:id', ensureAuthenticated, ContasController.blockValidation, ContasController.block);
 
 router.post('/entrar', UsuariosController.signInValidation, UsuariosController.signIn);
 router.post('/registrar', UsuariosController.signUpValidation, UsuariosController.signUp);

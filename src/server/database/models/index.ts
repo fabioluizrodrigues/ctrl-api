@@ -9,3 +9,4 @@ export * from './Empresa';
 export * from './UsuarioPermissao';
 export * from './UsuarioFuncao';
 export * from './FuncaoPermissao';
+export * from './Conta';
